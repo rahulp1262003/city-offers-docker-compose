@@ -1,28 +1,29 @@
-services:
-    offer-search:
-        image: typesense/typesense:27.0
-        restart: always
-        container_name: offer-search
-        ports:
-            - "8108:8108"
-        volumes:
-            - typesense_data:/data
-        environment:
-            - TYPESENSE_DATA_DIR=/data
-            - TYPESENSE_API_KEY=supersecret
-            - TYPESENSE_ENABLE_CORS=true
+version: "3.9"
 
-    backend:
-        image: rahul1263/cityoffer-backend:latest
-        restart: always
-        container_name: backend
-        ports:
-            - "3000:3000"
-        env_file:
-            - ./BACKEND/.env
-        depends_on:
-            - offer-search
-        volumes:
-            - ./BACKEND:/app
+services:
+  offer-search:
+    image: typesense/typesense:27.0
+    container_name: offer-search
+    restart: always
+    ports:
+      - "8108:8108"
+    volumes:
+      - typesense_data:/data
+    environment:
+      - TYPESENSE_DATA_DIR=/data
+      - TYPESENSE_API_KEY=supersecret
+      - TYPESENSE_ENABLE_CORS=true
+
+  backend:
+    image: rahul1263/cityoffer-backend:latest
+    container_name: backend
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./BACKEND/.env
+    depends_on:
+      - offer-search
+
 volumes:
-    typesense_data:
+  typesense_data:
